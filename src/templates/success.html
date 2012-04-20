@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>File Upload successed</title>
+</head>
+<body>
+	<h1>File upload successful!</h1>
+	<div class="uploadedImage">
+		<!--<img src="../../public/images/sample.jpg">-->
+	</div>
+	<canvas id="targetCanvas"></canvas>
+	<input type="CHECKBOX" id="drawLine" checked="checked" value="thirdLine" onchange="drawThirdLineOnCanvas('#targetCanvas', '#drawLine')">3分割</input>
+	<input type="hidden" id="image" value="../../public/images/scala-logo.png" />
+	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript">
+		var imageFile;
+		$(function(){ // ロード時実行関数
+			// 画像のパス取得
+			var path = $('#image').attr('value')
+			// 画像読み込み
+			imageFile = loadImage(path)
+			// 読み込んだ画像をもとにCanvasを設定
+			initializeCanvasByImage('#targetCanvas', imageFile)
+			// 画像表示
+			drawImageOnCanvas('#targetCanvas', imageFile)
+			// 罫線描画
+			drawThirdLineOnCanvas('#targetCanvas', '#drawLine')
+		})
+		
+		/*
+		 * 画像を読み込む
+		 */
+		function loadImage(imagePath) {
+			var img = new Image();
+			img.src = imagePath;
+
+			return img
+		}
+		
+		/*
+		 * キャンバスを初期化する
+		 */
+		function initializeCanvasByImage(targetCanvasId, imageFile) {
+			var canvas = $(targetCanvasId)
+			canvas.attr('width', imageFile.width)
+			canvas.attr('height', imageFile.height)
+		}
+
+		/*
+		 * 画像をキャンバスに描画する
+		 */
+		function drawImageOnCanvas(targetCanvasId, imageFile) {
+			var canvas = $(targetCanvasId)
+			if (!canvas) {
+				return false;
+			}
+
+			var ctx = canvas[0].getContext('2d')
+			
+			ctx.drawImage(imageFile, 0, 0, imageFile.width, imageFile.height)
+			ctx.save()
+		}
+
+		/*
+		 * 罫線を描画する
+		 */
+		function drawThirdLineOnCanvas(targetCanvasId, targetCheckboxId) {
+			var canvas = $(targetCanvasId)
+			var context = canvas[0].getContext('2d')
+
+			resetCanvas(targetCanvasId)
+			
+			var checkBox = $(targetCheckboxId)
+			if( checkBox.attr('checked')) {
+				var w = canvas.attr('width')
+				var h = canvas.attr('height')
+
+				context.beginPath()
+				
+				context.moveTo(w/3, 0)
+				context.lineTo(w/3, h)
+
+				context.moveTo(w/3*2, 0)
+				context.lineTo(w/3*2, h)
+
+				context.moveTo(0, h/3)
+				context.lineTo(w, h/3)
+
+				context.moveTo(0, h/3*2)
+				context.lineTo(w, h/3*2)
+
+				context.closePath()
+				context.stroke()
+			}
+		}
+
+		function resetCanvas(targetCanvasId) {
+			var canvas = $(targetCanvasId)
+			var context = canvas[0].getContext('2d')
+			
+			context.clearRect(0, 0, imageFile.width, imageFile.height)
+			context.drawImage(imageFile, 0, 0, imageFile.width, imageFile.height)
+		}
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+	<meta charset="UTF-8" />
+	<title>Compojure file upload</title>
+</head>
+<body>
+	<h1>ファイルを選んでください</h1>
+	<form action="/file" method="POST" enctype="multipart/form-data" >
+		<input name="file" type="file" size="20" />
+		<input name="submit" type="submit"value="Upload" />
+	</form>
+</body>
+</html>
