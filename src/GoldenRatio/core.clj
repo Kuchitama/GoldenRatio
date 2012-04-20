@@ -23,6 +23,11 @@
   (render (upload-success (str "public/images/" (get file :filename))))
 )
 
+(defn list
+  [files]
+  (render (image-file-list ["image1" "image2" "image3"]))
+)
+
 ;Routes定義
 (defroutes public-routes
           (GET "/" [] (render (index)))

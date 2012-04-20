@@ -15,3 +15,4 @@
   (is (= (list-table-body ["test1" "test2" "test3"]) 
          "<tr><td>0</td><td>test1</td></tr><tr><td>1</td><td>test2</td></tr><tr><td>2</td><td>test3</td></tr>")
       "失敗"))
+
