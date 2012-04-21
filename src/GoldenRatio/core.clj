@@ -2,7 +2,8 @@
   (:use [net.cgrand.enlive-html
          :only [deftemplate defsnippet content html-content clone-for nth-of-type first-child do-> set-attr sniptest at emit*]]
         [compojure.core]
-        [ring.adapter.jetty])
+        [ring.adapter.jetty]
+        [GoldenRatio.views])
   (:require (compojure [route :as route])
             (compojure [handler :as handler])
             (ring.util [response :as response])
@@ -12,27 +13,22 @@
 
 (defn render [t] (apply str t))
 
-
-(deftemplate index "templates/index.html" [])
-(deftemplate upload-success "templates/success.html" [file_path] [:div.uploadedImage] 
-             (html-content (str "<img src=\"" file_path "\">")))
-
 (defn upload-file
   [file]
   (ds/copy (file :tempfile) (ds/file-str (str "public/images/" (get file :filename))))
   (render (upload-success (str "public/images/" (get file :filename))))
 )
 
-(defn list
+(defn list-file
   [files]
   (render (image-file-list ["image1" "image2" "image3"]))
 )
 
-;Routes定義
-(defroutes public-routes
+(defroutes public-routes ;;Routes定義
           (GET "/" [] (render (index)))
           (mp/wrap-multipart-params
              (POST "/file" {params :params} (upload-file (get params :file))))
+          (GET "/list" [] (render (image-file-list ["test" "test" "test"])))
           (route/files "/public" )   
       )
 
