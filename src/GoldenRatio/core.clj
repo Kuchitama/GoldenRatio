@@ -14,6 +14,7 @@
 (import '(java.io File))
 
 (def domain "http://127.0.0.1:3000/")
+(def image-path {:absolute "public/images/" :relative "./public/images"})
 (defn render [t] (apply str t))
 
 (defn upload-file
@@ -30,14 +31,14 @@
 
 (defn show ;;
   []
-  (render (show-image (str domain "public/images/sample.jpg")))
+  (render (show-image (str domain (image-path :absolute) "sample.jpg")))
 )
 
 (defroutes public-routes ;;Routes定義
           (GET "/" [] (render (index)))
           (mp/wrap-multipart-params
              (POST "/file" {params :params} (upload-file (get params :file))))
-          ;(GET "/show/:file-name" [file-name] (show-image "sample.jpg"))
+          (GET "/show/:file-name" [file-name] (show-image (str domain (image-path :absolute) file-name)))
           (GET "/show" [] (show))
           (GET "/list" [] (list-file))
           (route/files "/public" )   
