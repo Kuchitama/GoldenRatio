@@ -11,6 +11,8 @@
             (clojure.contrib [duck-streams :as ds]))
   (:gen-class))
 
+(import '(java.io File))
+
 (defn render [t] (apply str t))
 
 (defn upload-file
@@ -20,15 +22,16 @@
 )
 
 (defn list-file
-  [files]
-  (render (image-file-list ["image1" "image2" "image3"]))
+  []
+  (let [files (map #(.getName %) (.listFiles (File. "./public/images")))]
+  (render (image-file-list files)))
 )
 
 (defroutes public-routes ;;Routes定義
           (GET "/" [] (render (index)))
           (mp/wrap-multipart-params
              (POST "/file" {params :params} (upload-file (get params :file))))
-          (GET "/list" [] (render (image-file-list ["test" "test" "test"])))
+          (GET "/list" [] (list-file))
           (route/files "/public" )   
       )
 
