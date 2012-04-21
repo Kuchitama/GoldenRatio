@@ -33,4 +33,10 @@
   (html-content 
     (str "<table><thead><tr>" list-table-header "</tr></thead>" (list-table-body file-list) "</table>")))
 
-
+(deftemplate show-image "templates/showImage.html" [file-name] ;;list
+  [:article#image-path]
+  (html-content 
+;    (str "<input type=\"hidden\" id=\"image\" value=\"" file-name "\" />")
+     (str "<img src=\"" file-name "\" >")
+  )
+)
